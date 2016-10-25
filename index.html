@@ -23,16 +23,24 @@
 		<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 		<![endif]-->
+		
 		<!--string.js-->
-		<script src="https://cdn.rawgit.com/jprichardson/string.js/master/lib/string.min.js"></script>
+		<script src="https://cdn.rawgit.com/jprichardson/string.js/master/dist/string.min.js"></script>
+		<!--'intent-utterance-generator' npm module-->
+		<script src="js/intent-utterance-generator-web.js"></script>
+		<!--clipboard.js-->
+		<script src="js/clipboard.min.js"></script>
 	</head>
 	
 	<body>
+	<a href="https://github.com/tejashah88"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/567c3a48d796e2fc06ea80409cc9dd82bf714434/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_darkblue_121621.png"></a>
+
 		<div class="jumbotron">
 			<div class="container">
 				<div class="starter-template">
-					<h1></h1>
-					<p class="lead">A website that allows you to generate numerous utterances with a simplistic GUI.</p>
+					<h1>Alexa Utterance Generator</h1>
+					<h2 >A website that allows you to generate numerous utterances with a simplistic GUI.</h2>
+					<p class="lead">Shoutout to <a href="https://github.com/miguelmota">miguelmota</a> for his <a href="https://github.com/miguelmota/intent-utterance-generator">intent-utterance-generator</a> node module!</p>
 				</div>
 
 				<div class="container">
@@ -65,8 +73,9 @@
 				<div id="finalResults" class="container" style="display:none">
 					<h2 class="list-group-item text-center">Final Results</h2>
 					<div class="container" style="padding:15px">
-						<code id="resultUtterances" style="background-color:white;color:black;padding:10px;display:block"></code>
+						<code id="resultUtterances" style="background-color:white;color:black;padding:10px;display:block">asdasd</code>
 					</div>
+					<button id="copyUtterances" class="btn btn-info btn-lg btn-block" data-clipboard-target="#resultUtterances" type="button">Copy!</button>
 				</div>
 
 			</div>
@@ -74,7 +83,7 @@
 
 		<div class="container">
 			<footer>
-				<p>Created with &hearts; and lots of code by Tejas Shah</p>
+				<p>Created with &hearts; and lots of code by Tejas Shah (<a href="https://github.com/tejashah88">tejashah88</a>)</p>
 			</footer>
 		</div>
 		<!-- /.container -->
@@ -89,16 +98,36 @@
 			var intentButtons;
 			var selectedIntent = "undefined";
 
+			var btnCopyUtterances = document.getElementById("copyUtterances");
+			var clipboard = new Clipboard(btnCopyUtterances);
+
+			clipboard.on('success', function(e) {
+				e.clearSelection();
+			});
+
 			$('#codeArea').bind('input propertychange', () => {
 				intents.set(selectedIntent, $("#codeArea").val());
 			});
 
+			$('#copyUtterances').on('click', (e) => {
+				alert("Success! The generated utterances have been copied.");
+			})
+
 			$("#compileUtterances").on('click', (e) => {
-				console.log(intents);
-				
+				if (intents.size === 0) {
+					document.getElementById("resultUtterances").innerText = "";
+					document.getElementById("finalResults").style.display = 'none';
+					return;
+				}
+
+				var inputData = {};
 				intents.forEach((value, key) => {
-					console.log("Key = " + key + " value = " + value);
-				})
+					var lines = value.split("\n");
+					inputData[key] = lines;
+				});
+
+				var outputData = intentUtteranceGenerator(inputData).toString();
+				document.getElementById("resultUtterances").innerText = outputData;
 
 				if (intents.size > 0)
 					document.getElementById("finalResults").style.display = 'inline';
