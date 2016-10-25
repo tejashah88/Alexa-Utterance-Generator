@@ -23,41 +23,49 @@
 		<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 		<![endif]-->
+		<!--string.js-->
+		<script src="https://cdn.rawgit.com/jprichardson/string.js/master/lib/string.min.js"></script>
 	</head>
 	
 	<body>
 		<div class="jumbotron">
 			<div class="container">
 				<div class="starter-template">
-					<h1>Alexa Utterance Generator</h1>
+					<h1></h1>
 					<p class="lead">A website that allows you to generate numerous utterances with a simplistic GUI.</p>
 				</div>
 
 				<div class="container">
 					<div class="col-xs-4">
-						<h3 class="list-group-item">Intents</h3>
+						<h3 class="list-group-item text-center">Intents</h3>
 						<br>
 						<div class="input-group">
-							<input id="intentName" type="text" class="form-control" placeholder="Add Intent...">
+							<input id="intentName" type="text" class="form-control input-lg" placeholder="Add Intent..."></input>
 							<span class="input-group-btn">
-								<button id="addIntent" class="btn btn-primary" type="button">+</button>
+								<button id="addIntent" class="btn btn-primary btn-lg" type="button">+</button>
 							</span>
 						</div>
 
-						<ul id="intentList" class="list-group">
-							<button id="intentHelloWorld" class="list-group-item">HelloWorld</button>
-						</ul>
+						<ul id="intentList" class="list-group"></ul>
+						<button id="compileUtterances" class="btn btn-success btn-lg btn-block" type="button">Create Utterances</button>
 					</div>
 
 					<div class="col-xs-8">
 						<div class="input-group">
-							<h3 id="intentTitle" class="list-group-item">Sign-Up</h3>
+							<h3 id="intentTitle" class="list-group-item text-center">Please add an intent</h3>
 							<span class="input-group-btn">
-								<h3 id="addIntent" class="btn btn-danger" type="button">x</h3>
+								<h3 id="deleteIntent" class="btn btn-danger btn-lg" type="button">x</h3>
 							</span>
 						</div>
 						<br>
-						<textarea id="codeArea" class="form-control" rows="20" id="comment"></textarea>
+						<textarea disabled id="codeArea" type="textarea" class="form-control" rows="20"></textarea>
+					</div>
+				</div>
+
+				<div id="finalResults" class="container" style="display:none">
+					<h2 class="list-group-item text-center">Final Results</h2>
+					<div class="container" style="padding:15px">
+						<code id="resultUtterances" style="background-color:white;color:black;padding:10px;display:block"></code>
 					</div>
 				</div>
 
@@ -73,45 +81,73 @@
 		<!-- Bootstrap core JavaScript
 			================================================== -->
 		<!-- Placed at the end of the document so the pages load faster -->
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 		<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
 		<script src="js/bootstrap.min.js"></script>
 		<script type="text/javascript">
-		var intents = new Map();
-		var intentButtons;
+			var intents = new Map();
+			var intentButtons;
+			var selectedIntent = "undefined";
 
-		$("codeArea").on('change', () => {
-			
-		});
+			$('#codeArea').bind('input propertychange', () => {
+				intents.set(selectedIntent, $("#codeArea").val());
+			});
 
-		$("#addIntent").on('click', (e) => {
-			var ul = document.getElementById("intentList");
-			var button = document.createElement("button");
-			var intentNameText = document.getElementById('intentName').value;
-			
-			if (intentNameText === "")
-				return;
+			$("#compileUtterances").on('click', (e) => {
+				console.log(intents);
+				
+				intents.forEach((value, key) => {
+					console.log("Key = " + key + " value = " + value);
+				})
 
-			if (intents.get(intentNameText) === undefined)
-				intents[intentNameText] = "";
-			else
-				return;
+				if (intents.size > 0)
+					document.getElementById("finalResults").style.display = 'inline';
+			})
 
-			document.getElementById('intentName').value = "";
+			$("#deleteIntent").on('click', (e) => {
+				var targetIntentBtn = document.getElementById("intent" + selectedIntent);
+				intents.delete(selectedIntent);
 
-			button.appendChild(document.createTextNode(intentNameText));
-			button.setAttribute("id", "intent" + intentNameText);
-			button.setAttribute("class", "list-group-item");
-			ul.appendChild(button);
+				if (targetIntentBtn !== null)
+					targetIntentBtn.remove();
 
-			intentButtons = document.getElementsByTagName("button");
-			for (var i = intentButtons.length - 1; i >= 0; i--) {
-				if (intentButtons[i].id != "addIntent") {
-					console.log(intentButtons[i].id);
-					intentButtons[i].
+				var ul = document.getElementById("intentList");
+				if ($("ul button").length === 0) {
+					document.getElementById("codeArea").disabled = true;
+					document.getElementById("intentTitle").innerText = "Please add an intent";
+				} else {
+					document.getElementById("codeArea").disabled = false;
+					document.getElementById("intentTitle").innerText = "Select an intent";
 				}
-			}
-		})
+			})
+
+			$("#addIntent").on('click', (e) => {
+				var ul = document.getElementById("intentList");
+				var button = document.createElement("button");
+				selectedIntent = document.getElementById('intentName').value;
+				
+				if (selectedIntent === "")
+					return;
+
+				if (intents.get(selectedIntent) === undefined)
+					intents.set(selectedIntent, "");
+				else
+					return;
+
+				document.getElementById('intentName').value = "";
+				document.getElementById("codeArea").disabled = false;
+
+				button.appendChild(document.createTextNode(selectedIntent));
+				button.setAttribute("id", "intent" + selectedIntent);
+				button.setAttribute("class", "list-group-item");
+				button.addEventListener("click", function() {
+					selectedIntent = this.innerText;
+					document.getElementById("intentTitle").innerText = selectedIntent;
+					$("#codeArea").val(intents.get(selectedIntent));
+				});
+
+				ul.appendChild(button);
+			})
 		</script>
 
 		<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
