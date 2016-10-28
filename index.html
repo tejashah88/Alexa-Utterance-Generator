@@ -186,7 +186,9 @@ Output: "I love big dogs", "I love small dogs", "I love dogs"</pre>
 
 				if (targetIntentBtn !== null)
 					targetIntentBtn.remove();
-
+				
+				$("#codeArea").val("");
+				
 				var ul = document.getElementById("intentList");
 				if ($("ul button").length === 0) {
 					document.getElementById("codeArea").disabled = true;
@@ -211,6 +213,8 @@ Output: "I love big dogs", "I love small dogs", "I love dogs"</pre>
 					return;
 
 				document.getElementById('intentName').value = "";
+				document.getElementById("intentTitle").innerText = selectedIntent;
+				$("#codeArea").val("");
 				document.getElementById("codeArea").disabled = false;
 
 				button.appendChild(document.createTextNode(selectedIntent));
