@@ -14,7 +14,7 @@
 		<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 		<link href="assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
 		<!-- Custom styles for this template -->
-		<link href="starter-template.css" rel="stylesheet">
+		<link href="css/basic-format.css" rel="stylesheet">
 		<!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
 		<!--[if lt IE 9]><script src="assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
 		<script src="assets/js/ie-emulation-modes-warning.js"></script>
@@ -23,6 +23,9 @@
 		<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 		<![endif]-->
+
+		<!-- Add IntroJs styles -->
+		<link href="css/introjs.min.css" rel="stylesheet">
 		
 		<!--string.js-->
 		<script src="https://cdn.rawgit.com/jprichardson/string.js/master/dist/string.min.js"></script>
@@ -33,18 +36,54 @@
 	</head>
 	
 	<body>
-	<a href="https://github.com/tejashah88"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/567c3a48d796e2fc06ea80409cc9dd82bf714434/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_darkblue_121621.png"></a>
+		<a href="https://github.com/tejashah88/Alexa-Utterance-Generator"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/567c3a48d796e2fc06ea80409cc9dd82bf714434/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_darkblue_121621.png"></a>
+
+		<!-- Modal -->
+		<div class="modal fade" id="introModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h1 class="modal-title" id="myModalLabel">Welcome</h1>
+					</div>
+					<div class="modal-body">
+						<h4>Would you like to go through a short tutorial on using the website?</h4>
+					</div>
+					<div class="modal-footer">
+						<button id="startIntro" type="button" class="btn btn-success btn-lg" data-dismiss="modal">Yes</button>
+						<button type="button" class="btn btn-danger btn-lg" data-dismiss="modal">No</button>
+					</div>
+				</div>
+			</div>
+		</div>
 
 		<div class="jumbotron">
 			<div class="container">
-				<div class="starter-template">
+				<div class="big-title">
 					<h1>Alexa Utterance Generator</h1>
-					<h2 >A website that allows you to generate numerous utterances with a simplistic GUI.</h2>
+					<h2>A website that allows you to generate numerous utterances with a simplistic GUI.</h2>
 					<p class="lead">Shoutout to <a href="https://github.com/miguelmota">miguelmota</a> for his <a href="https://github.com/miguelmota/intent-utterance-generator">intent-utterance-generator</a> node module!</p>
 				</div>
 
+				<div class="instruction-box" data-position="auto" data-step="3" data-intro="You can check out the syntax for generating the utterances here.">
+					<h2 style="text-align: center;">Syntax for utterance generator<button class="btn btn-link btn-lg" type="button" data-toggle="collapse" data-target="#helpCollapse" aria-expanded="false" aria-controls="helpCollapse">Toggle</button></h2>
+
+					<div class="collapse" id="helpCollapse">
+						<div class="card card-block">
+							<p>The syntax is very similar to the original syntax. You can check it out <a href="https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/defining-the-voice-interface#h2_sample_utterances">here</a>. The only difference is that the new syntax makes it easier to create variations of utterances with parenthesis groups.</p>
+							<pre class="code-area">
+Input: "(hello|hi) world"
+Output: "hello world", "hi world"</pre>
+
+							<p>You also can specify the parenthesis group to be 'optional'.</p>
+							<pre class="code-area">
+Input: "I love (big|small|) dogs"
+Output: "I love big dogs", "I love small dogs", "I love dogs"</pre>
+						</div>
+					</div>
+				</div>
+
 				<div class="container">
-					<div class="col-xs-4">
+					<div class="col-xs-4" data-position="auto" data-step="1" data-intro="This section allows you to create intents in order to organize your utterances to each intent.">
 						<h3 class="list-group-item text-center">Intents</h3>
 						<br>
 						<div class="input-group">
@@ -55,10 +94,10 @@
 						</div>
 
 						<ul id="intentList" class="list-group"></ul>
-						<button id="compileUtterances" class="btn btn-success btn-lg btn-block" type="button">Create Utterances</button>
+						<button id="compileUtterances" class="btn btn-success btn-lg btn-block" type="button" data-position="auto" data-step="4" data-intro="Once you are done, click this button to have your utterances generated. Good luck!">Create Utterances</button>
 					</div>
 
-					<div class="col-xs-8">
+					<div class="col-xs-8" data-position="auto" data-step="2" data-intro="This section is where you enter the script to generate the utterances.">
 						<div class="input-group">
 							<h3 id="intentTitle" class="list-group-item text-center">Please add an intent</h3>
 							<span class="input-group-btn">
@@ -73,7 +112,7 @@
 				<div id="finalResults" class="container" style="display:none">
 					<h2 class="list-group-item text-center">Final Results</h2>
 					<div class="container" style="padding:15px">
-						<code id="resultUtterances" style="background-color:white;color:black;padding:10px;display:block">asdasd</code>
+						<code id="resultUtterances" class="code-area"></code>
 					</div>
 					<button id="copyUtterances" class="btn btn-info btn-lg btn-block" data-clipboard-target="#resultUtterances" type="button">Copy!</button>
 				</div>
@@ -93,6 +132,10 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 		<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
 		<script src="js/bootstrap.min.js"></script>
+
+		<!-- intro.js -->
+		<script src="js/intro.min.js"></script>
+
 		<script type="text/javascript">
 			var intents = new Map();
 			var intentButtons;
@@ -104,6 +147,10 @@
 			clipboard.on('success', function(e) {
 				e.clearSelection();
 			});
+
+			$('#startIntro').on('click', (e) => {
+				introJs().start();
+			})
 
 			$('#codeArea').bind('input propertychange', () => {
 				intents.set(selectedIntent, $("#codeArea").val());
@@ -177,6 +224,8 @@
 
 				ul.appendChild(button);
 			})
+
+			$('#introModal').modal('show');
 		</script>
 
 		<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
