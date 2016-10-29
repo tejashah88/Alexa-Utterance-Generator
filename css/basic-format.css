@@ -17,3 +17,9 @@ body {
 	padding: 10px;
 	display: block;
 }
+
+.code-area-inline {
+	background-color: white;
+	color: black;
+	display: inline;
+}

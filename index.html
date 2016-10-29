@@ -28,11 +28,11 @@
 		<link href="css/introjs.min.css" rel="stylesheet">
 		
 		<!--string.js-->
-		<script src="https://cdn.rawgit.com/jprichardson/string.js/master/dist/string.min.js"></script>
+		<script async src="https://cdn.rawgit.com/jprichardson/string.js/master/dist/string.min.js"></script>
 		<!--'intent-utterance-generator' npm module-->
-		<script src="js/intent-utterance-generator-web.js"></script>
+		<script async src="js/intent-utterance-generator-web.js"></script>
 		<!--clipboard.js-->
-		<script src="js/clipboard.min.js"></script>
+		<script async src="js/clipboard.min.js"></script>
 	</head>
 	
 	<body>
@@ -69,15 +69,17 @@
 
 					<div class="collapse" id="helpCollapse">
 						<div class="card card-block">
-							<p>The syntax is very similar to the original syntax. You can check it out <a href="https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/defining-the-voice-interface#h2_sample_utterances">here</a>. The only difference is that the new syntax makes it easier to create variations of utterances with parenthesis groups.</p>
+							<p>The syntax is very similar to the original syntax for making the utterances. You can check it out <a href="https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/defining-the-voice-interface#h2_sample_utterances">here</a>. The only difference is that the new syntax makes it easier to create variations of utterances with parenthesis groups.</p>
 							<pre class="code-area">
 Input: "(hello|hi) world"
 Output: "hello world", "hi world"</pre>
 
-							<p>You also can specify the parenthesis group to be 'optional'.</p>
+							<p>You also can specify the parenthesis group to be 'optional', with the '|' symbol.</p>
 							<pre class="code-area">
-Input: "I love (big|small|) dogs"
-Output: "I love big dogs", "I love small dogs", "I love dogs"</pre>
+Input: "I (love|hate) (|big) dogs"
+Output: "I love big dogs", "I love dogs", "I hate big dogs", "I hate dogs"</pre>
+							<p>Note that <code class="code-area-inline">(|big|small)</code> would work the same as <code class="code-area-inline">(big|small)</code>. I'm working a fix at the moment.</p>
+							<p>If you want more examples, the original author of the node module, <a href="https://github.com/miguelmota">miguelmota</a>, has some <a href="https://github.com/miguelmota/intent-utterance-expander#usage">here</a>!</p>
 						</div>
 					</div>
 				</div>
@@ -186,9 +188,9 @@ Output: "I love big dogs", "I love small dogs", "I love dogs"</pre>
 
 				if (targetIntentBtn !== null)
 					targetIntentBtn.remove();
-				
+
 				$("#codeArea").val("");
-				
+
 				var ul = document.getElementById("intentList");
 				if ($("ul button").length === 0) {
 					document.getElementById("codeArea").disabled = true;
