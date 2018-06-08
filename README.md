@@ -1,2 +1,2 @@
 # Alexa-Utterance-Generator
-A [website](http://alexa-utter-gen.paperplane.io/) that allows you to generate numerous utterances with a simplistic GUI.
+A [website](https://tejashah88.github.io/Alexa-Utterance-Generator/) that allows you to generate numerous utterances with a simplistic GUI.
