@@ -76,7 +76,7 @@ Output: "hello world", "hi world"</pre>
 							<pre class="code-area">
 Input: "I (love|hate) (|big) dogs"
 Output: "I love big dogs", "I love dogs", "I hate big dogs", "I hate dogs"</pre>
-							<p>Note that <code class="code-area-inline">(|big|small)</code> would work the same as <code class="code-area-inline">(big|small)</code>. I'm working a fix at the moment.</p>
+							<p>Note that <code class="code-area-inline">(|big|small)</code> would work the same as <code class="code-area-inline">(big|small)</code>, but adding an empty space to the beginning makes it work as expected (i.e. <code class="code-area-inline">( |big|small)</code>). I'm working a fix at the moment.</p>
 							<p>If you want more examples, the original author of the node module, <a href="https://github.com/miguelmota">miguelmota</a>, has some <a href="https://github.com/miguelmota/intent-utterance-expander#usage">here</a>!</p>
 						</div>
 					</div>
